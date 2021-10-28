@@ -8,7 +8,6 @@ import com.gostech.fcisfilestorageservice.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public String uploadFile(InputStream is, String s3Key) {
         if (s3client.doesObjectExist(bucketName, s3Key)) {
-            throw new S3Exception("Файл с ключом " + s3Key + " уже существует в хранилище S3", HttpStatus.CONFLICT);
+            throw new S3Exception("Файл с ключом " + s3Key + " уже существует в хранилище S3");
         }
         try {
             ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -38,9 +37,7 @@ public class S3ServiceImpl implements S3Service {
             log.info("Файл с ключом: " + s3Key + " упешно отправлен в корзину: " + bucketName + " хранилища S3");
         } catch (Exception e) {
             throw new S3Exception(
-                    "Ошибка загрузки файла с ключом: " + s3Key + " в корзину: " + bucketName + " хранилища S3",
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    e);
+                    "Ошибка загрузки файла с ключом: " + s3Key + " в корзину: " + bucketName + " хранилища S3", e);
 
         }
         return s3Key;
@@ -52,7 +49,7 @@ public class S3ServiceImpl implements S3Service {
         try {
             s3object = s3client.getObject(bucketName, s3Key);
         } catch (AmazonS3Exception e) {
-            throw new S3Exception("Файл с ключом " + s3Key + " не найден в хранилище S3", HttpStatus.NOT_FOUND, e);
+            throw new S3Exception("Файл с ключом " + s3Key + " не найден в хранилище S3", e);
         }
 
         S3ObjectInputStream inputStream = s3object.getObjectContent();
@@ -61,14 +58,14 @@ public class S3ServiceImpl implements S3Service {
             log.info("Скачан файл: " + s3Key + " из корзины: " + bucketName);
             return content;
         } catch (IOException e) {
-            throw new S3Exception("Ошибка записи файла в массив байтов.", HttpStatus.INTERNAL_SERVER_ERROR, e);
+            throw new S3Exception("Ошибка записи файла в массив байтов.", e);
         }
     }
 
     @Override
     public String deleteFile(String s3Key) {
         if (!s3client.doesObjectExist(bucketName, s3Key)) {
-            throw new S3Exception("Файл с ключом " + s3Key + " не найден в хранилище S3", HttpStatus.NOT_FOUND);
+            throw new S3Exception("Файл с ключом " + s3Key + " не найден в хранилище S3");
         }
         try {
             s3client.deleteObject(bucketName, s3Key);
@@ -78,9 +75,7 @@ public class S3ServiceImpl implements S3Service {
             log.info("Файл: " + s3Key + " удален из корзины: " + bucketName);
         } catch (Exception e) {
             throw new S3Exception(
-                    "Ошибка удаления файла " + s3Key + " из корзины: " + bucketName,
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    e);
+                    "Ошибка удаления файла " + s3Key + " из корзины: " + bucketName, e);
         }
         return "Файл: " + s3Key + " удален из корзины: " + bucketName;
     }
@@ -88,7 +83,7 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public List<String> listFiles(String s3Key) {
         if (!s3client.doesObjectExist(bucketName, s3Key)) {
-            throw new S3Exception("Файл с ключом " + s3Key + " не найден в хранилище S3", HttpStatus.NOT_FOUND);
+            throw new S3Exception("Файл с ключом " + s3Key + " не найден в хранилище S3");
         }
         List<String> list = new LinkedList<>();
         try {
@@ -98,9 +93,7 @@ public class S3ServiceImpl implements S3Service {
         });
         } catch (Exception e) {
             throw new S3Exception(
-                    "Ошибка просмотра файлов " + s3Key + " из корзины: " + bucketName,
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    e);
+                    "Ошибка просмотра файлов " + s3Key + " из корзины: " + bucketName, e);
         }
         return list;
     }
