@@ -17,21 +17,6 @@
         <java.version>1.8</java.version>
     </properties>
 
-    <distributionManagement>
-        <repository>
-            <id>fcis-filestorage-service</id>
-            <name>fcis-filestorage-service</name>
-            <url>git:master://nikita_lvov@bitbucket.org/nikita_lvov/fcis-filestorage-service.git</url>
-        </repository>
-    </distributionManagement>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>synergian-repo</id>
-            <url>https://raw.github.com/synergian/wagon-git/releases</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,15 +46,5 @@
             <version>2.5</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>ar.com.synergian</groupId>
-                <artifactId>wagon-git</artifactId>
-                <version>0.2.5</version>
-            </extension>
-        </extensions>
-    </build>
 
 </project>
