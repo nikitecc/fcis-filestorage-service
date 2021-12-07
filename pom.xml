@@ -79,8 +79,8 @@
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
                     <branch>refs/heads/mvn-repo</branch>
                     <includes><include>**/*</include></includes>
-                    <repositoryName>nikitecc</repositoryName>
-                    <repositoryOwner>fcis-filestorage-service</repositoryOwner>
+                    <repositoryName>fcis-filestorage-service</repositoryName>
+                    <repositoryOwner>nikitecc</repositoryOwner>
                 </configuration>
                 <executions>
                     <execution>
