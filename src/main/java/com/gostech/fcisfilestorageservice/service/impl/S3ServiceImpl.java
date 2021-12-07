@@ -87,10 +87,7 @@ public class S3ServiceImpl implements S3Service {
         }
         List<String> list = new LinkedList<>();
         try {
-        s3client.listObjects(bucketName, s3Key).getObjectSummaries().forEach(itemResult -> {
-            list.add(itemResult.getKey());
-            System.out.println(itemResult.getKey());
-        });
+        s3client.listObjects(bucketName, s3Key).getObjectSummaries().forEach(itemResult -> list.add(itemResult.getKey()));
         } catch (Exception e) {
             throw new S3Exception(
                     "Ошибка просмотра файлов " + s3Key + " из корзины: " + bucketName, e);
